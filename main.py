@@ -29,6 +29,7 @@ if __name__ == '__main__':
     assert parse('http://google.com/?putin=huilo&lalalala=lalalala') == {'putin': 'huilo', 'lalalala': 'lalalala'}
     assert parse('http://google.com/?example10=almost') == {'example10': 'almost'}
     assert parse('http://google.com/?funhomework=false') == {'funhomework': 'false'}
+    assert parse('http://google.com/?fucking=really&forgot=howToCount') == {'fucking': 'really', 'forgot': 'howToCount'}
 
 
 def parse_cookie(query: str) -> dict:
