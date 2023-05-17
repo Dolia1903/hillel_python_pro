@@ -1,4 +1,5 @@
 from urllib.parse import urlparse, parse_qs
+from http.cookies import SimpleCookie
 
 
 def parse(query: str) -> dict:
@@ -31,7 +32,11 @@ if __name__ == '__main__':
 
 
 def parse_cookie(query: str) -> dict:
-    return {}
+    cookie = SimpleCookie()
+    cookie.load(query)
+
+    cookies = {k: v.value for k, v in cookie.items()}
+    return cookies
 
 
 if __name__ == '__main__':
@@ -39,3 +44,15 @@ if __name__ == '__main__':
     assert parse_cookie('') == {}
     assert parse_cookie('name=Dima;age=28;') == {'name': 'Dima', 'age': '28'}
     assert parse_cookie('name=Dima=User;age=28;') == {'name': 'Dima=User', 'age': '28'}
+    assert parse_cookie('name=Vova;age=30') == {'name': 'Vova', 'age': '30'}
+    assert parse_cookie('sphere=IT;profession=ServiceOps') == {'sphere': 'IT', 'profession': 'ServiceOps'}
+    assert parse_cookie('country=Ukraine; lng = UA; timezone = GMT+3') == {'country': 'Ukraine', 'lng': 'UA',
+                                                                           'timezone': 'GMT+3'}
+    assert parse_cookie('moskali=yes; dead = true; skiko = 200000') == {'moskali': 'yes', 'dead': 'true',
+                                                                        'skiko': '200000'}
+    assert parse_cookie('tired=true;example = 5') == {'tired': 'true', 'example': '5'}
+    assert parse_cookie('When will this shit end?') == {}
+    assert parse_cookie('NotNow=no;okay=true') == {'NotNow': 'no', 'okay': 'true'}
+    assert parse_cookie('CanIPleaseJustDie=False') == {'CanIPleaseJustDie': 'False'}
+    assert parse_cookie('done=9; left=1;') == {'done': '9', 'left': '1'}
+    assert parse_cookie('Dobbie=Elf; Got=Sock; Can=Sleep') == {'Dobbie': 'Elf', 'Got': 'Sock', 'Can': 'Sleep'}
